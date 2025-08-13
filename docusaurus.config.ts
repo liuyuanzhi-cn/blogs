@@ -211,6 +211,12 @@ const config: Config = {
       crossorigin: 'anonymous',
     },
   ],
+  scripts:[
+    {
+      src: "/js/casibase.js",
+      async: true,
+    },
+  ]
 };
 
 export default config;
