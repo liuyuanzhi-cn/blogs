@@ -1,0 +1,4 @@
+docusaurus:
+  label: 'sort'
+  permalink: '/sort'
+  description: '排序相关的文章'
