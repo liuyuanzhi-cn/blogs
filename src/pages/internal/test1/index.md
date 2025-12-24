@@ -1,1 +1,202 @@
-# 模块测试访问
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人日程表</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', sans-serif; background: #f5f7fa; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 2em; }
+        .nav-tabs { display: flex; justify-content: center; margin-bottom: 30px; gap: 10px; }
+        .tab-btn { padding: 12px 24px; background: #fff; border: 2px solid #3498db; color: #3498db; cursor: pointer; border-radius: 25px; transition: all 0.3s; font-weight: bold; }
+        .tab-btn.active, .tab-btn:hover { background: #3498db; color: white; }
+        .schedule-table { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: none; }
+        .schedule-table.active { display: block; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #34495e; color: white; padding: 15px; text-align: left; font-size: 1.1em; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .time-col { width: 20%; font-weight: bold; color: #2c3e50; }
+        .activity-col { width: 80%; line-height: 1.6; }
+        .highlight { background: #e8f4fd; }
+        .current-activity { background: #d4edff; border-left: 4px solid #3498db; }
+        @media (max-width: 768px) {
+            .nav-tabs { flex-wrap: wrap; }
+            .tab-btn { padding: 10px 15px; font-size: 0.9em; }
+            th, td { padding: 10px; font-size: 0.9em; }
+            .time-col { width: 25%; }
+            .activity-col { width: 75%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 个人日程表</h1>
+        <div id="current-time" style="text-align: center; margin-bottom: 20px; font-size: 1.2em;"></div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showSchedule('weekday', event)">周一至周四</button>
+            <button class="tab-btn" onclick="showSchedule('friday', event)">周五</button>
+            <button class="tab-btn" onclick="showSchedule('weekend', event)">周末</button>
+        </div>
+
+        <!-- 周一至周四 -->
+        <div id="weekday" class="schedule-table active">
+            <table>
+                <thead><tr><th>时间段</th><th>活动内容</th></tr></thead>
+                <tbody>
+                    <tr data-start="06:15" data-end="07:45"><td class="time-col">06:15-07:45</td><td class="activity-col">家务（洗漱、早饭、中饭）</td></tr>
+                    <tr data-start="07:45" data-end="08:05"><td class="time-col">07:45-08:05</td><td class="activity-col">去往公司</td></tr>
+                    <tr data-start="08:05" data-end="09:20" class="highlight"><td class="time-col">08:05-09:20</td><td class="activity-col">研习时光（学习和记忆面试知识点）</td></tr>
+                    <tr data-start="09:20" data-end="11:50"><td class="time-col">09:20-11:50</td><td class="activity-col">上班</td></tr>
+                    <tr data-start="11:50" data-end="12:50"><td class="time-col">11:50-12:50</td><td class="activity-col">读书和记录</td></tr>
+                    <tr data-start="12:50" data-end="13:30"><td class="time-col">12:50-13:30</td><td class="activity-col">午饭、散步、锻炼</td></tr>
+                    <tr data-start="13:30" data-end="14:10"><td class="time-col">13:30-14:10</td><td class="activity-col">午休</td></tr>
+                    <tr data-start="14:10" data-end="17:10"><td class="time-col">14:10-17:10</td><td class="activity-col">上班</td></tr>
+                    <tr data-start="17:10" data-end="18:10" class="highlight"><td class="time-col">17:10-18:10</td><td class="activity-col">做算法题</td></tr>
+                    <tr data-start="18:10" data-end="18:50"><td class="time-col">18:10-18:50</td><td class="activity-col">返回家里、购买生活物品、拿快递</td></tr>
+                    <tr data-start="18:50" data-end="22:00"><td class="time-col">18:50-22:00</td><td class="activity-col">做晚饭、收拾屋子、陪伴家人、洗漱</td></tr>
+                    <tr data-start="22:00" data-end="06:15" style="background:#ecf0f1;"><td class="time-col">22:00-06:15</td><td class="activity-col">8小时睡眠</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 周五 -->
+        <div id="friday" class="schedule-table">
+            <table>
+                <thead><tr><th>时间段</th><th>活动内容</th></tr></thead>
+                <tbody>
+                    <tr data-start="06:15" data-end="07:45"><td class="time-col">06:15-07:45</td><td class="activity-col">家务（洗漱、早饭、中饭）</td></tr>
+                    <tr data-start="07:45" data-end="08:05"><td class="time-col">07:45-08:05</td><td class="activity-col">去往公司</td></tr>
+                    <tr data-start="08:05" data-end="09:20" class="highlight"><td class="time-col">08:05-09:20</td><td class="activity-col">研习时光（学习和记忆面试知识点）</td></tr>
+                    <tr data-start="09:20" data-end="11:50"><td class="time-col">09:20-11:50</td><td class="activity-col">上班</td></tr>
+                    <tr data-start="11:50" data-end="12:50"><td class="time-col">11:50-12:50</td><td class="activity-col">读书和记录</td></tr>
+                    <tr data-start="12:50" data-end="13:30"><td class="time-col">12:50-13:30</td><td class="activity-col">午饭、散步、锻炼</td></tr>
+                    <tr data-start="13:30" data-end="14:10"><td class="time-col">13:30-14:10</td><td class="activity-col">午休</td></tr>
+                    <tr data-start="14:10" data-end="16:30" class="highlight"><td class="time-col">14:10-16:30</td><td class="activity-col">做算法题和总结</td></tr>
+                    <tr data-start="16:30" data-end="17:30" class="highlight"><td class="time-col">16:30-17:30</td><td class="activity-col">自由支配时间</td></tr>
+                    <tr data-start="17:30" data-end="18:00"><td class="time-col">17:30-18:00</td><td class="activity-col">返回家里、购买生活物品、拿快递</td></tr>
+                    <tr data-start="18:00" data-end="22:00"><td class="time-col">18:00-22:00</td><td class="activity-col">做晚饭、收拾屋子、陪伴家人、洗漱</td></tr>
+                    <tr data-start="22:00" data-end="06:15" style="background:#ecf0f1;"><td class="time-col">22:00-06:15</td><td class="activity-col">8小时睡眠</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 周末 -->
+        <div id="weekend" class="schedule-table">
+            <table>
+                <thead><tr><th>时间段</th><th>活动内容</th></tr></thead>
+                <tbody>
+                    <tr data-start="06:15" data-end="08:45" class="highlight"><td class="time-col">06:15-08:45</td><td class="activity-col">读书、学习等</td></tr>
+                    <tr data-start="08:45" data-end="22:00"><td class="time-col">08:45-22:00</td><td class="activity-col">一日三餐，做包子、零食等，外出，陪伴家人等</td></tr>
+                    <tr data-start="22:00" data-end="06:15" style="background:#ecf0f1;"><td class="time-col">22:00-06:15</td><td class="activity-col">8小时睡眠</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 显示当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-CN', options);
+            setTimeout(updateCurrentTime, 1000);
+        }
+
+        // 转换时间字符串为分钟数
+        function timeToMinutes(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        // 高亮当前活动
+        function highlightCurrentActivity() {
+            const now = new Date();
+            const currentHours = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentTotalMinutes = currentHours * 60 + currentMinutes;
+            
+            // 获取当前是星期几 (0=周日, 1=周一, ..., 6=周六)
+            const dayOfWeek = now.getDay();
+            
+            // 确定当前应该显示哪个日程表
+            let activeTableId = 'weekday';
+            if (dayOfWeek === 5) { // 周五
+                activeTableId = 'friday';
+            } else if (dayOfWeek === 0 || dayOfWeek === 6) { // 周末
+                activeTableId = 'weekend';
+            }
+            
+            // 切换到正确的日程表
+            showSchedule(activeTableId);
+            
+            // 在活动表中查找当前活动
+            const activeTable = document.getElementById(activeTableId);
+            if (activeTable) {
+                // 先移除所有当前活动的高亮
+                activeTable.querySelectorAll('tr.current-activity').forEach(row => {
+                    row.classList.remove('current-activity');
+                });
+                
+                // 查找当前活动
+                const rows = activeTable.querySelectorAll('tbody tr[data-start][data-end]');
+                for (const row of rows) {
+                    const startTime = row.getAttribute('data-start');
+                    const endTime = row.getAttribute('data-end');
+                    
+                    const startMinutes = timeToMinutes(startTime);
+                    let endMinutes = timeToMinutes(endTime);
+                    
+                    // 处理跨日时间段（如22:00-06:15）
+                    if (endMinutes < startMinutes) {
+                        endMinutes += 24 * 60; // 加上一天的分钟数
+                    }
+                    
+                    if (currentTotalMinutes >= startMinutes && currentTotalMinutes < endMinutes) {
+                        row.classList.add('current-activity');
+                        break; // 只高亮一个活动（防止重叠）
+                    }
+                }
+            }
+        }
+
+        // 切换日程表显示
+        function showSchedule(type, event) {
+            // 隐藏所有表格
+            document.querySelectorAll('.schedule-table').forEach(table => {
+                table.classList.remove('active');
+            });
+            // 移除所有按钮激活状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // 显示选中的表格和激活按钮
+            document.getElementById(type).classList.add('active');
+            
+            // 只有当event存在时才操作按钮（防止从highlightCurrentActivity调用时报错）
+            if (event) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            updateCurrentTime();
+            highlightCurrentActivity();
+            setInterval(highlightCurrentActivity, 60000); // 每分钟检查一次当前活动
+        };
+    </script>
+</body>
+</html>
